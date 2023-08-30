@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-py"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  name     String
+  notes    String?
+  phone    String?
+  telegram String?
+  snapchat String?
+
+  // Relationships
+  referredBy CustomerReferral?  @relation("ReferredBy")
+  referredTo CustomerReferral[] @relation("ReferredTo")
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  orders         Order[]
+  orderAddresses OrderAddress[]
+}
+
+model CustomerReferral {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // References
+  referrer   Customer @relation("ReferredTo", fields: [referrerId], references: [id])
+  referrerId Int
+
+  referred   Customer @relation("ReferredBy", fields: [referredId], references: [id])
+  referredId Int      @unique
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  stock       Int // Total stock for the product
+  costPerUnit Float // Cost of the product per unit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  listings ProductListing[]
+}
+
+model ProductListing {
+  id        Int      @id @default(autoincrement())
+  price     Float
+  quantity  Int // Quantity available for this listing
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // References
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  // Calculated field for profit
+  profit    Float       @map("price - product.costPerUnit") // Calculate profit as price - costPerUnit
+  OrderItem OrderItem[]
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  type      String // Pickup, Delivery, Postal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  orderItems OrderItem[]
+  addresses  OrderAddress?
+
+  customer     Customer       @relation(fields: [customerId], references: [id])
+  customerId   Int
+  OrderPayment OrderPayment[]
+  OrderRefund  OrderRefund[]
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // References
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+
+  productListing   ProductListing @relation(fields: [productListingId], references: [id])
+  productListingId Int
+}
+
+model OrderAddress {
+  id         Int      @id @default(autoincrement())
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+  customerId Int?
+  orderId    Int      @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+  order    Order     @relation(fields: [orderId], references: [id])
+}
+
+model OrderPayment {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  paymentDate DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+}
+
+model OrderRefund {
+  id         Int      @id @default(autoincrement())
+  amount     Float
+  refundDate DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
