@@ -20,16 +20,18 @@ model Customer {
   referredBy CustomerReferral?  @relation("ReferredBy")
   referredTo CustomerReferral[] @relation("ReferredTo")
 
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  orders         Order[]
-  orderAddresses OrderAddress[]
+  createdAt            DateTime       @default(now())
+  updatedAt_w_default  DateTime       @default(now()) @updatedAt
+  updatedAt_wo_default DateTime?      @updatedAt
+  orders               Order[]
+  orderAddresses       OrderAddress[]
 }
 
 model CustomerReferral {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   // References
   referrer   Customer @relation("ReferredTo", fields: [referrerId], references: [id])
@@ -40,23 +42,25 @@ model CustomerReferral {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  stock       Int // Total stock for the product
-  costPerUnit Float // Cost of the product per unit
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  name                 String
+  stock                Int // Total stock for the product
+  costPerUnit          Float // Cost of the product per unit
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   // Relationships
   listings ProductListing[]
 }
 
 model ProductListing {
-  id        Int      @id @default(autoincrement())
-  price     Float
-  quantity  Int // Quantity available for this listing
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  price                Float
+  quantity             Int // Quantity available for this listing
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   // References
   product   Product @relation(fields: [productId], references: [id])
@@ -68,10 +72,11 @@ model ProductListing {
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  type      String // Pickup, Delivery, Postal
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  type                 String // Pickup, Delivery, Postal
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   // Relationships
   orderItems OrderItem[]
@@ -84,10 +89,11 @@ model Order {
 }
 
 model OrderItem {
-  id        Int      @id @default(autoincrement())
-  quantity  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  quantity             Int
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   // References
   order   Order @relation(fields: [orderId], references: [id])
@@ -98,46 +104,50 @@ model OrderItem {
 }
 
 model OrderAddress {
-  id         Int      @id @default(autoincrement())
-  street     String
-  city       String
-  state      String
-  postalCode String
-  country    String
-  customerId Int?
-  orderId    Int      @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  street               String
+  city                 String
+  state                String
+  postalCode           String
+  country              String
+  customerId           Int?
+  orderId              Int       @unique
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   customer Customer? @relation(fields: [customerId], references: [id])
   order    Order     @relation(fields: [orderId], references: [id])
 }
 
 model OrderPayment {
-  id          Int      @id @default(autoincrement())
-  amount      Float
-  paymentDate DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  amount               Float
+  paymentDate          DateTime
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   order   Order @relation(fields: [orderId], references: [id])
   orderId Int
 }
 
 model OrderRefund {
-  id         Int      @id @default(autoincrement())
-  amount     Float
-  refundDate DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  amount               Float
+  refundDate           DateTime
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 
   order   Order @relation(fields: [orderId], references: [id])
   orderId Int
 }
 
 model Log {
-  id        Int      @id @default(autoincrement())
-  message   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   Int       @id @default(autoincrement())
+  message              String
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
 }
