@@ -1,27 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from typing import List
-from data.database import ActivePrismaClient
 from schemas.customer import Customer
 from services import customers as service
+import asyncio
 
 # Create our API router
-router = APIRouter()
-
-# Create a dependency for our database connection
-async def get_db_session():
-    try:
-        db = await ActivePrismaClient().connect()
-        yield db
-    finally:
-        await db.disconnect()
+router = APIRouter(
+    prefix="/customers",
+    tags=["Customers"],
+)
 
 @router.get(
     "/",
     response_model=List[Customer],
     summary="Get all customers"
 )
-def get_all_customers(db: ActivePrismaClient = Depends(get_db_session)):
-    return service.retrieve_all_customers(db)
+async def get_all_customers():
+    return await service.retrieve_all_customers()
+    
 
 
 @router.get(
@@ -29,9 +25,8 @@ def get_all_customers(db: ActivePrismaClient = Depends(get_db_session)):
     response_model=Customer,
     summary="Get a customer by ID"
 )
-def get_customer_by_id(
+async def get_customer_by_id(
     customer_id: int = Path(..., gt=0),
-    db: ActivePrismaClient = Depends(get_db_session)
 ):
-    return service.retrieve_customer_by_id(db, customer_id)
+    return await service.retrieve_customer_by_id(customer_id)
 

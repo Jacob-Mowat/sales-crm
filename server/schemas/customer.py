@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 """
@@ -23,14 +23,14 @@ model Customer {
 
 """
 class Customer(BaseModel):
-    id: Optional[int] = None
-    name: str
-    notes: Optional[str] = None
-    phone: Optional[str] = None
-    telegram: Optional[str] = None
-    snapchat: Optional[str] = None
-    createdAt: Optional[str] = None
-    updatedAt: Optional[str] = None
+    id: int = Field(None, alias="id")
+    name: str = Field(..., alias="name")
+    notes: Optional[str] = Field(None, alias="notes")
+    phone: Optional[str] = Field(None, alias="phone")
+    telegram: Optional[str] = Field(None, alias="telegram")
+    snapchat: Optional[str] =  Field(None, alias="snapchat")
+    createdAt: Optional[str] = Field(None, alias="createdAt")
+    updatedAt: Optional[str] = Field(None, alias="updatedAt")
 
     class Config:
-        orm_mode = True
+        orm_mode = False
