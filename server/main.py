@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from routes import customers
 from data.database import prisma
 
-fast_api = FastAPI(prefix="/api/v1")
+fast_api = FastAPI()
 fast_api.include_router(customers.router)
 
 @fast_api.on_event("startup")
@@ -15,4 +15,4 @@ async def shutdown():
 
 @fast_api.get("/")
 def read_root():
-    return {"version": "1.0.0"}
+    return {"version": "1.0.1"}

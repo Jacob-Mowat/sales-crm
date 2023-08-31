@@ -17,8 +17,6 @@ router = APIRouter(
 )
 async def get_all_customers():
     return await service.retrieve_all_customers()
-    
-
 
 @router.get(
     "/{customer_id}",
@@ -30,3 +28,13 @@ async def get_customer_by_id(
 ):
     return await service.retrieve_customer_by_id(customer_id)
 
+@router.post(
+    "/",
+    response_model=Customer,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a new customer"
+)
+async def create_customer(
+    customer: Customer
+):
+    return await service.create_customer(customer)

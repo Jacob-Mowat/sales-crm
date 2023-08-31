@@ -6,3 +6,6 @@ async def retrieve_all_customers():
 
 async def retrieve_customer_by_id(customer_id: int):
     return await prisma.customer.find_first(where={"id": customer_id})
+
+async def create_customer(customer: CreateCustomer):
+    return await prisma.customer.create(customer)

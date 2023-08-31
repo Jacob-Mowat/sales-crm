@@ -23,7 +23,7 @@ model Customer {
 
 """
 class Customer(BaseModel):
-    id: int = Field(None, alias="id")
+    id: Optional[int] = Field(None, alias="id")
     name: str = Field(..., alias="name")
     notes: Optional[str] = Field(None, alias="notes")
     phone: Optional[str] = Field(None, alias="phone")
@@ -33,4 +33,15 @@ class Customer(BaseModel):
     updatedAt: Optional[str] = Field(None, alias="updatedAt")
 
     class Config:
-        orm_mode = False
+        orm_mode = True
+
+
+class CreateCustomer(BaseModel):
+    name: str = Field(..., alias="name")
+    notes: Optional[str] = Field(None, alias="notes")
+    phone: Optional[str] = Field(None, alias="phone")
+    telegram: Optional[str] = Field(None, alias="telegram")
+    snapchat: Optional[str] =  Field(None, alias="snapchat")
+
+    class Config:
+        orm_mode = True
