@@ -37,4 +37,12 @@ async def get_customer_by_id(
 async def create_customer(
     customer: Customer
 ):
-    return await service.create_customer(customer)
+    serviceResponse = await service.create_customer(customer)
+
+    if serviceResponse is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Customer could not be created"
+        )
+    
+    return serviceResponse
