@@ -21,12 +21,21 @@ async def get_all_customers():
 @router.get(
     "/{customer_id}",
     response_model=Customer,
+    status_code=status.HTTP_200_OK,
     summary="Get a customer by ID"
 )
 async def get_customer_by_id(
     customer_id: int = Path(..., gt=0),
 ):
-    return await service.retrieve_customer_by_id(customer_id)
+    customer = await service.retrieve_customer_by_id(customer_id)
+    
+    if customer is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Customer not found"
+        )
+    else:
+        return customer
 
 @router.post(
     "/",
