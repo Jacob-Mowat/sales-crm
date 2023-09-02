@@ -14,11 +14,15 @@ Backend: Python, FastAPI, Prisma and Postgres
 
 Client:
 
--   [ ] Haven't planned this out yet.
+> Haven't planned this out yet.
 
 Server:
 
 -   [x] Create schema for database.
+-   [x] Create endpoints to CRUD Customer
+-   [x] Create endpoint to get all Customers.
+-   [ ] Create endpoints to CRUD CustomerContact
+-   [ ] Create endpoints to CRD CustomerReferral
 
 ## Setup
 
