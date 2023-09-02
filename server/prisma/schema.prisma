@@ -11,21 +11,33 @@ datasource db {
 model Customer {
   id Int @id @default(autoincrement())
 
-  name     String
-  notes    String?
-  phone    String?
-  telegram String?
-  snapchat String?
+  name  String
+  notes String?
 
   // Relationships
   referredBy CustomerReferral?  @relation("ReferredBy")
   referredTo CustomerReferral[] @relation("ReferredTo")
 
-  createdAt            DateTime       @default(now())
-  updatedAt_w_default  DateTime       @default(now()) @updatedAt
-  updatedAt_wo_default DateTime?      @updatedAt
-  orders               Order[]
-  orderAddresses       OrderAddress[]
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
+
+  orders         Order[]
+  orderAddresses OrderAddress[]
+  contacts       CustomerContact[]
+}
+
+model CustomerContact {
+  id                   Int       @id @default(autoincrement())
+  type                 String
+  value                String
+  createdAt            DateTime  @default(now())
+  updatedAt_w_default  DateTime  @default(now()) @updatedAt
+  updatedAt_wo_default DateTime? @updatedAt
+
+  // References
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
 }
 
 model CustomerReferral {
