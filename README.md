@@ -15,7 +15,9 @@ Backend: Python, FastAPI, Prisma and Postgres
 Client:
 
 -   [ ] Haven't planned this out yet.
-        Server:
+
+Server:
+
 -   [x] Create schema for database.
 
 ## Setup
