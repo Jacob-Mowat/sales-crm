@@ -2,6 +2,8 @@
 
 A simple CRM to manage sales, inventory and customers. Dashboard for various analytics of the business financials and to spot trends in product sales and demands. Option to integrate with other services via the REST API.
 
+I also plan to utilize pytorch to offer some fancy prediction/trends analysis.
+
 ## Stack
 
 Frontend: TBC..
