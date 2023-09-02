@@ -26,9 +26,6 @@ class Customer(BaseModel):
     id: Optional[int] = Field(None, alias="id")
     name: str = Field(..., alias="name")
     notes: Optional[str] = Field(None, alias="notes")
-    phone: Optional[str] = Field(None, alias="phone")
-    telegram: Optional[str] = Field(None, alias="telegram")
-    snapchat: Optional[str] =  Field(None, alias="snapchat")
     createdAt: Optional[object] = Field(None, alias="createdAt")
     updatedAt: Optional[object] = Field(None, alias="updatedAt")
 
@@ -39,9 +36,7 @@ class Customer(BaseModel):
 class CreateCustomer(BaseModel):
     name: str = Field(..., alias="name")
     notes: Optional[str] = Field(None, alias="notes")
-    phone: Optional[str] = Field(None, alias="phone")
-    telegram: Optional[str] = Field(None, alias="telegram")
-    snapchat: Optional[str] =  Field(None, alias="snapchat")
+
 
     class Config:
         orm_mode = True
