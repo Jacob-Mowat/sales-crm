@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from typing import List
-from schemas.customer import Customer
+from schemas.customer import CreateCustomer, Customer
 from services import customers as service
 import asyncio
 
@@ -35,7 +35,7 @@ async def get_customer_by_id(
     summary="Create a new customer"
 )
 async def create_customer(
-    customer: Customer
+    customer: CreateCustomer
 ):
     serviceResponse = await service.create_customer(customer)
 
@@ -44,5 +44,5 @@ async def create_customer(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Customer could not be created"
         )
-    
-    return serviceResponse
+    else:
+        return serviceResponse
