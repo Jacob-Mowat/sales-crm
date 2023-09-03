@@ -22,9 +22,13 @@ async def create_customer(customer: CreateCustomer) -> Union[Customer, None]:
     
 async def create_customer_contact(customer_id: int, customer_contact: CreateCustomerContact) -> Union[CustomerContact, None]:
     try :
+        # Set the customerId to the one provided in the path
         _cc = customer_contact.__dict__
         _cc["customerId"] = customer_id 
+        
+        # Create the CustomerContact
         data: CustomerContact = await prisma.customercontact.create(_cc)
+        
         return data
     except Exception as e:
         print(e)
