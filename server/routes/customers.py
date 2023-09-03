@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from typing import List
-from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact
+from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact, UpdateCustomer
 from services import customers as service
 import asyncio
 
