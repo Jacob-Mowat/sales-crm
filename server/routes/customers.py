@@ -61,7 +61,7 @@ async def create_customer(
     
 # Update a Customer
 @router.post(
-    "/{customer_id},
+    "/{customer_id}",
     response_model=Customer,
     status_code=status.HTTP_200_OK,
 )
