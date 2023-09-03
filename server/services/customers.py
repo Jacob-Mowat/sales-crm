@@ -20,6 +20,20 @@ async def create_customer(customer: CreateCustomer) -> Union[Customer, None]:
         print(e)
         return None
     
+async def update_customer(customer_id: int, customer: CreateCustomer) -> Union[Customer, None]:
+    try:
+        updated_customer: Customer = await prisma.customer.update({
+            where: {
+                id: customer_id
+            },
+            data: customer.__dict__
+        })
+        
+        return updated_customer
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        return None
+    
 async def create_customer_contact(customer_id: int, customer_contact: CreateCustomerContact) -> Union[CustomerContact, None]:
     try :
         # Set the customerId to the one provided in the path
