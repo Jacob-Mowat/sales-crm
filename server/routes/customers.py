@@ -66,8 +66,8 @@ async def create_customer(
     status_code=status.HTTP_200_OK,
 )
 async def update_customer(
-    customer_id: int = Path(..., gt=0),
-    customer: UpdateCustomer
+    customer: UpdateCustomer,
+    customer_id: int = Path(..., gt=0)
 ):
     serviceResponse = await service.update_customer(customer_id, customer)
 
