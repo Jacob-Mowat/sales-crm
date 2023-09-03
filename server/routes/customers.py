@@ -59,6 +59,17 @@ async def create_customer(
     else:
         return serviceResponse
     
+# Update a Customer
+@router.post(
+    "/{customer_id},
+    response_model=Customer,
+    status_code=status.HTTP_200_OK,
+)
+async def update_customer(
+    customer_id: int = Path(..., gt=0),
+    customer: UpdateCustomer
+)
+    
 # Create a new CustomerContact and connect it to a Customer
 @router.post(
     "/{customer_id}/create-contact",
