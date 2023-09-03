@@ -22,12 +22,12 @@ async def create_customer(customer: CreateCustomer) -> Union[Customer, None]:
     
 async def update_customer(customer_id: int, customer: CreateCustomer) -> Union[Customer, None]:
     try:
-        updated_customer: Customer = await prisma.customer.update
+        updated_customer: Customer = await prisma.customer.update(
             where={
                 id: customer_id
             },
             data=customer.__dict__
-        })
+        )
         
         return updated_customer
     except Exception as e:
