@@ -68,7 +68,16 @@ async def create_customer(
 async def update_customer(
     customer_id: int = Path(..., gt=0),
     customer: UpdateCustomer
-)
+):
+    serviceResponse = await service.update_customer(customer_id, customer)
+
+    if serviceResponse is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Customer could not be updated"
+        )
+    else:
+        return serviceResponse
     
 # Create a new CustomerContact and connect it to a Customer
 @router.post(
