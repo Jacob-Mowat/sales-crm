@@ -21,6 +21,13 @@ class CreateCustomer(BaseModel):
     class Config:
         orm_mode = True
         
+class UpdateCustomer(BaseModel):
+    name: Optional[str] = Field(None, alias="name")
+    notes: Optional[str] = Field(None, alias="notes")
+
+    class Config:
+        orm_mode = True
+        
 class CustomerContact(BaseModel):
     id: int = Field(None, alias="id")
     type: str = Field(..., alias="type")
