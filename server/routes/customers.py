@@ -62,7 +62,7 @@ async def create_customer(
 # Create a new CustomerContact and connect it to a Customer
 @router.post(
     "/{customer_id}/create-contact",
-    response_model=Customer,
+    response_model=CustomerContact,
     status_code=status.HTTP_201_CREATED,
     summary="Create a new customer contact and connect it to a customer"
 )
