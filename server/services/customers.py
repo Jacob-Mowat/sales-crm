@@ -21,12 +21,47 @@ async def create_customer(customer: CreateCustomer) -> Union[Customer, None]:
         return None
     
 async def update_customer(customer_id: int, customer: CreateCustomer) -> Union[Customer, None]:
+    fields_to_update: dict = {}
+    
+    print(customer.__dict__)
+    
+    if customer.__dict__['notes'] and customer.__dict__['name']:
+        updated_customer: Customer = await prisma.customer.update(
+            where={
+                id: customer_id
+            },
+            data={
+                'name': customer.__dict__['name'],
+                'notes': customer.__dict__['notes']
+            }
+        )
+    elif customer.__dict__['name'] and not customer.__dict__['notes']:
+        updated_name: Customer = await prisma.customer.update(
+            where={
+                id: customer_id
+            },
+            data={
+                name: customer.__dict__['name']
+            }
+        )
+    elif customer.__dict__['notes'] and not customer.__dict__['name']:
+        updated_name: Customer = await prisma.customer.update(
+            where={
+                id: customer_id
+            },
+            data={
+                notes: customer.__dict__['notes']
+            }
+        )
+    
     try:
         updated_customer: Customer = await prisma.customer.update(
             where={
                 id: customer_id
             },
-            data=customer.__dict__
+            data={
+                **fields_to_update
+            }
         )
         
         return updated_customer
