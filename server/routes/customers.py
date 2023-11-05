@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from typing import List
-from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact
+from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact, UpdateCustomer
 from services import customers as service
 import asyncio
 
@@ -55,6 +55,26 @@ async def create_customer(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Customer could not be created"
+        )
+    else:
+        return serviceResponse
+    
+# Update a Customer
+@router.post(
+    "/{customer_id}",
+    response_model=Customer,
+    status_code=status.HTTP_200_OK,
+)
+async def update_customer(
+    customer: UpdateCustomer,
+    customer_id: int = Path(..., gt=0)
+):
+    serviceResponse = await service.update_customer(customer_id, customer)
+
+    if serviceResponse is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Customer could not be updated"
         )
     else:
         return serviceResponse
