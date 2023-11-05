@@ -1,5 +1,5 @@
 from data.database import prisma
-from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact
+from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, CustomerContact, UpdateCustomer
 from typing import Union
 
 async def retrieve_all_customers():
@@ -20,51 +20,45 @@ async def create_customer(customer: CreateCustomer) -> Union[Customer, None]:
         print(e)
         return None
     
-async def update_customer(customer_id: int, customer: CreateCustomer) -> Union[Customer, None]:
-    fields_to_update: dict = {}
+async def update_customer(customer_id: int, customer: UpdateCustomer) -> Union[Customer, None]:
+    updated: bool = False
     
-    print(customer.__dict__)
+    name: str = customer.__dict__['name']
+    notes: str = customer.__dict__['notes']
     
-    if customer.__dict__['notes'] and customer.__dict__['name']:
-        updated_customer: Customer = await prisma.customer.update(
-            where={
-                id: customer_id
-            },
-            data={
-                'name': customer.__dict__['name'],
-                'notes': customer.__dict__['notes']
-            }
-        )
-    elif customer.__dict__['name'] and not customer.__dict__['notes']:
-        updated_name: Customer = await prisma.customer.update(
-            where={
-                id: customer_id
-            },
-            data={
-                name: customer.__dict__['name']
-            }
-        )
-    elif customer.__dict__['notes'] and not customer.__dict__['name']:
-        updated_name: Customer = await prisma.customer.update(
-            where={
-                id: customer_id
-            },
-            data={
-                notes: customer.__dict__['notes']
-            }
-        )
+    print(f"[DEBUG] name: {name}")
+    print(f"[DEBUG] notes: {notes}")
     
     try:
-        updated_customer: Customer = await prisma.customer.update(
-            where={
-                id: customer_id
-            },
-            data={
-                **fields_to_update
-            }
-        )
+        if name:
+            updated_name: Customer = await prisma.customer.update(
+                where={
+                    'id': customer_id
+                },
+                data={
+                    'name': name
+                }
+            )
+            
+            updated = True
         
-        return updated_customer
+        if notes:
+            updated_notes: Customer = await prisma.customer.update(
+                where={
+                    'id': customer_id
+                },
+                data={
+                    'notes': notes
+                }
+            )
+            
+            updated = True
+            
+        if updated:
+            return await prisma.customer.find_first(where={"id": customer_id})
+        else:
+            return None
+        
     except Exception as e:
         print(f"[ERROR] {e}")
         return None
