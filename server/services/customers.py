@@ -3,7 +3,7 @@ from schemas.customer import CreateCustomer, Customer, CreateCustomerContact, Cu
 from typing import Union
 
 async def retrieve_all_customers():
-    return await prisma.customer.find_many()
+    return await prisma.customer.find_many(include={"contacts": True})
 
 async def retrieve_customer_by_id(customer_id: int):
     try:
@@ -73,6 +73,20 @@ async def create_customer_contact(customer_id: int, customer_contact: CreateCust
         data: CustomerContact = await prisma.customercontact.create(_cc)
         
         return data
+    except Exception as e:
+        print(e)
+        return None
+    
+async def delete_customer_contact(customer_id: int, contact_id: int) -> Union[CustomerContact, None]:
+    try:
+        # Delete the CustomerContact
+        print(f"[DEBUG] Deleting contact with id: {contact_id}")
+        
+        return await prisma.customercontact.delete(
+            where={
+                'id': int(contact_id)
+            }
+        )
     except Exception as e:
         print(e)
         return None
